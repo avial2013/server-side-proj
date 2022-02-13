@@ -130,6 +130,16 @@ public class ProductController {
                 .orElseThrow(()->new ProductNotFoundException(id));
         return productFactory.toModel(product);
     }
+    
+        // #########################
+    // 2. in ProductNotFoundException I added a ResponseEntity with status 404.
+//    @GetMapping("products/{id}")
+//    ResponseEntity<EntityModel<Product>> singleProduct(@PathVariable Long id){
+//        Product product = database.findById(id)
+//                .orElseThrow(()->new ProductNotFoundException(id));
+//        return ResponseEntity.ok(productFactory.toModel(product));
+//    }
+    // #########################
 
 
 //    @PutMapping("/products/{id}")

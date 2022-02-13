@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -19,7 +20,8 @@ public class Order {
     private String title;
     private Double price;
 
-    @ManyToMany
+    @OneToMany
+    @JoinColumn(name = "products", nullable = false)
     private List<Product> productList;
 
     public Order(LocalDate purchaseDate, String title, Double price, List<Product> productList) {
