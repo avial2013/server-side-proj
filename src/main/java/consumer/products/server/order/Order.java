@@ -15,17 +15,16 @@ public class Order {
     @Id
     @GeneratedValue
     private Long id;
-
-    private LocalDate purchaseDate;
+//    private LocalDate purchaseDate;
     private String title;
     private Double price;
 
     @OneToMany
-    @JoinColumn(name = "products", nullable = false)
+    @JoinColumn(name = "products")
     private List<Product> productList;
 
     public Order(LocalDate purchaseDate, String title, Double price, List<Product> productList) {
-        this.purchaseDate = purchaseDate;
+//        this.purchaseDate = purchaseDate;
         this.title = title;
         this.price = price;
         this.productList = productList;

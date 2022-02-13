@@ -6,6 +6,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class OrderLinkFactory implements RepresentationModelAssembler<Order, EntityModel<Order>> {
@@ -13,10 +14,9 @@ public class OrderLinkFactory implements RepresentationModelAssembler<Order, Ent
     @Override
     public EntityModel<Order> toModel(Order order) {
         // TODO: להוציא מהערה כשיש את המתדות - singleOrder ו getAllOrders בקונטרולר
-        return null;
-//        return EntityModel.of(order,
-//                linkTo(methodOn(OrderController.class).singleOrder(order.getId())).withSelfRel(),
-//                linkTo(methodOn(OrderController.class).getAllOrders()).withRel("All orders"));
+        return EntityModel.of(order,
+                linkTo(methodOn(OrderController.class).singleOrder(order.getId())).withSelfRel(),
+                linkTo(methodOn(OrderController.class).allOrders()).withRel("All orders"));
     }
 
     @Override
