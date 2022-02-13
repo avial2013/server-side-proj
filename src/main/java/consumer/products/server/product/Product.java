@@ -27,12 +27,21 @@ public class Product {
 
 
 
-    public Product(String name, String category, double price) {
+    public Product(String name, String category, double price, String description) {
         this.name = name;
         this.category = category;
         this.price = price;
+        this.description = description;
+        this.order = null; // רק כדי שיהיה ברור
     }
     public Product(){
 
+    }
+    public Product(Product other){
+        this.name = other.name;
+        this.category = other.category;
+        this.price = other.price;
+        this.description = other.description;
+        this.order = other.order;
     }
 }
