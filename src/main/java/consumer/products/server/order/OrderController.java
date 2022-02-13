@@ -56,5 +56,27 @@ public class OrderController {
                 .created(entityProduct.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityProduct);
     }
+    
+    @GetMapping("/orders/{id}/products")
+    public ResponseEntity<CollectionModel<EntityModel<Product>>>
+    productsByOrder(@PathVariable long id){
+        // מצאתי את ההזמנה לפי המזהה ואם היא לא קיימת תיזק שגיאה
+        Order order = database.findById(id)
+                .orElseThrow(()->new OrderNotFoundException(id));
+
+        // לקחתי את כל מוצרים שקשורים לאותה הזמנה
+        List<Product> products = order.getProductList();
+
+        // EntityModel הפכתי אותו ל
+        // והופסתי קישור לאותו מוצר ואותה הזמנה
+        List<EntityModel<Product>> entityModelList =products.stream()
+                .map(product -> EntityModel.of(product,
+                                linkTo(methodOn(ProductController.class).singleProduct(product.getId())).withSelfRel(),
+                        linkTo(methodOn(OrderController.class).singleOrder(order.getId())).withRel("Return to order")))
+                .collect(Collectors.toList());
+
+        // הוספתי סטאטוס 200
+        return ResponseEntity.ok(CollectionModel.of(entityModelList));
+    }
 
 }
