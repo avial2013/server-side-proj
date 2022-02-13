@@ -34,9 +34,9 @@ public class Product {
         this.description = description;
         this.order = null; // רק כדי שיהיה ברור
     }
-    public Product(){
-
-    }
+ 
+    public Product(){}
+ 
     public Product(Product other){
         this.name = other.name;
         this.category = other.category;
