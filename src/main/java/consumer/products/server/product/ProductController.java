@@ -42,26 +42,26 @@ public class ProductController {
 //
 //    }
 
-    @GetMapping("/products")
-    CollectionModel<EntityModel<Product>> getAllProducts(){
-        List<EntityModel<Product>> products = database.findAll().stream()
-                .map(product -> productFactory.toModel(product)) //.map(productFactory::toModel)
-                .collect(Collectors.toList());
-        return CollectionModel.of(products,
-                linkTo(methodOn(ProductController.class)).withSelfRel());
-    }
+//     @GetMapping("/products")
+//     CollectionModel<EntityModel<Product>> getAllProducts(){
+//         List<EntityModel<Product>> products = database.findAll().stream()
+//                 .map(product -> productFactory.toModel(product)) //.map(productFactory::toModel)
+//                 .collect(Collectors.toList());
+//         return CollectionModel.of(products,
+//                 linkTo(methodOn(ProductController.class)).withSelfRel());
+//     }
 
-    // #########################
-    // 1.
-//    @GetMapping("/products")
-//    public ResponseEntity<CollectionModel<EntityModel<Product>>> getAllProducts(){
-//        List<EntityModel<Product>> products = database.findAll().stream()
-//                .map(product -> productFactory.toModel(product))
-//                .collect(Collectors.toList());
-//        return ResponseEntity
-//                .ok(CollectionModel.of(products));
-//    }
-    // #########################
+    
+//     1.
+   @GetMapping("/products")
+   public ResponseEntity<CollectionModel<EntityModel<Product>>> allProducts(){
+       List<EntityModel<Product>> products = database.findAll().stream()
+               .map(product -> productFactory.toModel(product))
+               .collect(Collectors.toList());
+       return ResponseEntity
+               .ok(CollectionModel.of(products));
+   }
+
 
 
 //    @PostMapping("/products")
@@ -124,22 +124,21 @@ public class ProductController {
 //
 //    }
 
-    @GetMapping("products/{id}")
-    public EntityModel<Product> singleProduct(@PathVariable Long id){
-        Product product = database.findById(id)
-                .orElseThrow(()->new ProductNotFoundException(id));
-        return productFactory.toModel(product);
-    }
+//     @GetMapping("products/{id}")
+//     public EntityModel<Product> singleProduct(@PathVariable Long id){
+//         Product product = database.findById(id)
+//                 .orElseThrow(()->new ProductNotFoundException(id));
+//         return productFactory.toModel(product);
+//     }
     
-        // #########################
-    // 2. in ProductNotFoundException I added a ResponseEntity with status 404.
-//    @GetMapping("products/{id}")
-//    ResponseEntity<EntityModel<Product>> singleProduct(@PathVariable Long id){
-//        Product product = database.findById(id)
-//                .orElseThrow(()->new ProductNotFoundException(id));
-//        return ResponseEntity.ok(productFactory.toModel(product));
-//    }
-    // #########################
+    // 2. 
+   @GetMapping("products/{id}")
+   ResponseEntity<EntityModel<Product>> singleProduct(@PathVariable Long id){
+       Product product = database.findById(id)
+               .orElseThrow(()->new ProductNotFoundException(id));
+       return ResponseEntity.ok(productFactory.toModel(product));
+   }
+
 
 
 //    @PutMapping("/products/{id}")
