@@ -22,13 +22,13 @@ public class LoadDatabase {
         return args -> {
             log.info("logging" +
                     productsDB.save
-                            (new Product("AirPods v3 2021", "Headphones", 699.0)));
+                            (new Product("AirPods v3 2021", "Headphones", 699.0,"abc")));
             log.info("logging" +
                     productsDB.save
-                            (new Product("iPhone 13", "Cellular", 4000.0)));
+                            (new Product("iPhone 13", "Cellular", 4000.0,"abc")));
             log.info("logging" +
                     productsDB.save
-                            (new Product("MacBook pro 2021", "Laptops", 23000.0)));
+                            (new Product("MacBook pro 2021", "Laptops", 23000.0,"abc")));
         };
     }
 
