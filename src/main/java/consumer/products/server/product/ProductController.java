@@ -54,7 +54,7 @@ public class ProductController {
     
 //     1.
    @GetMapping("/products")
-   public ResponseEntity<CollectionModel<EntityModel<Product>>> allProducts(){
+   public ResponseEntity<CollectionModel<EntityModel<Product>>> getAllProducts(){
        List<EntityModel<Product>> products = database.findAll().stream()
                .map(product -> productFactory.toModel(product))
                .collect(Collectors.toList());
