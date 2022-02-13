@@ -21,21 +21,18 @@ public class OrderController {
         this.orderLinkFactory = orderLinkFactory;
     }
 
-    @GetMapping("/orders")
-   Integer allOrders(){
-        return 1;
-    }
+   
 
 
-//    // 1
-//    @GetMapping("/orders")
-//    public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders(){
-//        List<EntityModel<Order>> orders = database.findAll().stream()
-//                .map(order -> orderLinkFactory.toModel(order))
-//                .collect(Collectors.toList());
-//        return ResponseEntity
-//                .ok(CollectionModel.of(orders));
-//    }
+   // 1
+   @GetMapping("/orders")
+   public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders(){
+       List<EntityModel<Order>> orders = database.findAll().stream()
+               .map(order -> orderLinkFactory.toModel(order))
+               .collect(Collectors.toList());
+       return ResponseEntity
+               .ok(CollectionModel.of(orders));
+   }
 
 
     //     2. in ProductNotFoundException I added a ResponseEntity with status 404.
