@@ -108,8 +108,9 @@ public class OrderController {
     
     // שאלה 4 ב - OrderController
     @PutMapping("order/{id}")
-    ResponseEntity<?> addToOrder(@RequestBody Product aProduct, @PathVariable Long orderID) {
+    ResponseEntity<?> addToOrder(@RequestBody Product aProduct, @PathVariable(value = "id") Long orderID) {
 
+//        return orderID;
         // הכנסתי את ה-ORDER למשתנה ע"י הID- שלו
         Order updatedOrder = database.getById(orderID);
         // הוספתי ל-LIST את ה-PRODUCT מה-REQUEST_BODY
@@ -117,6 +118,6 @@ public class OrderController {
 
         // שלחתי בחזרה את ה-RESPONSE_ENTITY שלו
         EntityModel<Order> entityOrder = orderLinkFactory.toModel(database.save(updatedOrder));
-        return ResponseEntity.created(entityOrder.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityOrder);
+        return ResponseEntity.ok("Product was added successfully");
     }
 }
