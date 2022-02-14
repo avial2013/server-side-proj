@@ -19,7 +19,7 @@ public class Order {
     private String title;
     private Double price;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name = "products")
     private List<Product> productList;
 
