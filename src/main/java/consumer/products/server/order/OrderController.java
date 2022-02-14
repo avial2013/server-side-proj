@@ -105,4 +105,18 @@ public class OrderController {
         // הוספתי סטאטוס 200
         return ResponseEntity.ok(CollectionModel.of(entityModelList));
     }
+    
+    // שאלה 4 ב - OrderController
+    @PutMapping("order/{id}")
+    ResponseEntity<?> addToOrder(@RequestBody Product aProduct, @PathVariable Long orderID) {
+
+        // הכנסתי את ה-ORDER למשתנה ע"י הID- שלו
+        Order updatedOrder = database.getById(orderID);
+        // הוספתי ל-LIST את ה-PRODUCT מה-REQUEST_BODY
+        updatedOrder.getProductList().add(aProduct);
+
+        // שלחתי בחזרה את ה-RESPONSE_ENTITY שלו
+        EntityModel<Order> entityOrder = orderLinkFactory.toModel(database.save(updatedOrder));
+        return ResponseEntity.created(entityOrder.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityOrder);
+    }
 }
