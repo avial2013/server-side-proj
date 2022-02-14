@@ -23,4 +23,11 @@ public class OrderLinkFactory implements RepresentationModelAssembler<Order, Ent
     public CollectionModel<EntityModel<Order>> toCollectionModel(Iterable<? extends Order> entities) {
         return RepresentationModelAssembler.super.toCollectionModel(entities);
     }
+    
+    public EntityModel<Product> toModelOfProductWithOrderLink(Order order, Product product){
+        return EntityModel.of(product,
+                linkTo(methodOn(ProductController.class).singleProduct(product.getId())).withSelfRel(),
+                linkTo(methodOn(OrderController.class).singleOrder(order.getId())).withRel("Return to order"));
+    }
+    
 }
