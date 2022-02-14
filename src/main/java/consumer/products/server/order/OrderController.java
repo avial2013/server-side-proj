@@ -9,6 +9,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,18 +27,16 @@ public class OrderController {
         this.orderLinkFactory = orderLinkFactory;
     }
 
-   
 
-
-   // 1
-   @GetMapping("/orders")
-   public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders(){
-       List<EntityModel<Order>> orders = database.findAll().stream()
-               .map(order -> orderLinkFactory.toModel(order))
-               .collect(Collectors.toList());
-       return ResponseEntity
-               .ok(CollectionModel.of(orders));
-   }
+    // 1
+    @GetMapping("/orders")
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders() {
+        List<EntityModel<Order>> orders = database.findAll().stream()
+                .map(order -> orderLinkFactory.toModel(order))
+                .collect(Collectors.toList());
+        return ResponseEntity
+                .ok(CollectionModel.of(orders));
+    }
 
 
     //     2. in ProductNotFoundException I added a ResponseEntity with status 404.
@@ -58,49 +57,49 @@ public class OrderController {
                 .created(entityProduct.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityProduct);
     }
-    
+
     @GetMapping("/orders/{id}/products")
     public ResponseEntity<CollectionModel<EntityModel<Product>>>
-    productsByOrder(@PathVariable long id){
+    productsByOrder(@PathVariable long id) {
         // מצאתי את ההזמנה לפי המזהה ואם היא לא קיימת תיזק שגיאה
         Order order = database.findById(id)
-                .orElseThrow(()->new OrderNotFoundException(id));
+                .orElseThrow(() -> new OrderNotFoundException(id));
 
         // לקחתי את כל מוצרים שקשורים לאותה הזמנה
         List<Product> products = order.getProductList();
 
         // EntityModel הפכתי אותו ל
         // והופסתי קישור לאותו מוצר ואותה הזמנה
-        List<EntityModel<Product>> entityModelList =products.stream()
-                .map(product -> EntityModel.of(product,
-                                linkTo(methodOn(ProductController.class).singleProduct(product.getId())).withSelfRel(),
-                        linkTo(methodOn(OrderController.class).singleOrder(order.getId())).withRel("Return to order")))
+        List<EntityModel<Product>> entityModelList = products.stream()
+                .map(product ->
+                        orderLinkFactory.toModelOfProductWithOrderLink(order, product)
+                )
                 .collect(Collectors.toList());
 
         // הוספתי סטאטוס 200
         return ResponseEntity.ok(CollectionModel.of(entityModelList));
     }
 
-     @GetMapping("/orders/{id}/sale")
+    @GetMapping("/orders/{id}/sale")
     public ResponseEntity<CollectionModel<EntityModel<Product>>>
-    getSaleOnProducts(@PathVariable long id){
+    productsByOrderWithSale(@PathVariable long id) {
         // מצאתי את ההזמנה לפי המזהה ואם היא לא קיימת תיזק שגיאה
         Order order = database.findById(id)
-                .orElseThrow(()->new OrderNotFoundException(id));
+                .orElseThrow(() -> new OrderNotFoundException(id));
 
-        // לקחתי את כל מוצרים שקשורים לאותה הזמנה
-        List<Product> products = order.getProductList();
-
+        // יצרתי רשימה חדשה עם האובייקטים חדשים שהם אותו מוצר רק עם מחיר אחרי הנחה
+        List<Product> productsAfterSale = new LinkedList<>();
+        for (Product product : order.getProductList()) {
+            Product temp = new Product(product);
+            temp.setPrice(temp.getPrice() * 0.75);
+            productsAfterSale.add(temp);
+        }
         // EntityModel הפכתי אותו ל
         // והופסתי קישור לאותו מוצר ואותה הזמנה
-        List<EntityModel<Product>> entityModelList =products.stream()
-                .map(product ->{
-                    product = new Product(product);
-                    product.setPrice(product.getPrice()*0.75);
-                    return EntityModel.of(product,
-                        linkTo(methodOn(ProductController.class).singleProduct(product.getId())).withSelfRel(),
-                        linkTo(methodOn(OrderController.class).singleOrder(order.getId())).withRel("Return to order"));
-                })
+        List<EntityModel<Product>> entityModelList = productsAfterSale.stream()
+                .map(product ->
+                        orderLinkFactory.toModelOfProductWithOrderLink(order, product)
+                )
                 .collect(Collectors.toList());
 
         // הוספתי סטאטוס 200
