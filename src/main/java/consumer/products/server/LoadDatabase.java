@@ -25,7 +25,7 @@ public class LoadDatabase {
                             (new Product("AirPods v3 2021", "Headphones", 699.0,"abc")));
             log.info("logging" +
                     productsDB.save
-                            (new Product("iPhone 13", "Cellular", 4000.0,"abc")));
+                            (new Product("iPhone13", "Cellular", 4000.0,"abc")));
             log.info("logging" +
                     productsDB.save
                             (new Product("MacBook pro 2021", "Laptops", 23000.0,"abc")));

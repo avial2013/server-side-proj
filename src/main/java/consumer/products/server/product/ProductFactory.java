@@ -14,7 +14,7 @@ public class ProductFactory implements
     public EntityModel<Product> toModel(Product product) {
         return EntityModel.of(product,
                 linkTo(methodOn(ProductController.class).singleProduct(product.getId())).withSelfRel(),
-        linkTo(methodOn(ProductController.class).getAllProducts()).withRel("All products"));
+        linkTo(methodOn(ProductController.class).getAllProducts(java.util.Optional.empty())).withRel("All products"));
     }
 
 }
