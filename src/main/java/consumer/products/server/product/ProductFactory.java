@@ -3,6 +3,9 @@ package consumer.products.server.product;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -14,7 +17,7 @@ public class ProductFactory implements
     public EntityModel<Product> toModel(Product product) {
         return EntityModel.of(product,
                 linkTo(methodOn(ProductController.class).singleProduct(product.getId())).withSelfRel(),
-        linkTo(methodOn(ProductController.class).getAllProducts(java.util.Optional.empty())).withRel("All products"));
+        linkTo(methodOn(ProductController.class).getAllProducts(Optional.empty())).withRel("All products"));
     }
 
 }

@@ -2,7 +2,6 @@ package consumer.products.server.order;
 
 
 import consumer.products.server.product.Product;
-import org.springframework.context.annotation.Profile;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -30,12 +30,19 @@ public class OrderController {
 
     // 1
     @GetMapping("/orders")
-    public ResponseEntity<CollectionModel<EntityModel<Order>>> allOrders() {
-        List<EntityModel<Order>> orders = database.findAll().stream()
+    public ResponseEntity<?> allOrders(@RequestParam Optional<Double> price) {
+        List<Order> orders;
+        if (price.isPresent()) {
+            orders = database.findOrdersThatTheyCheaper(price.get());
+        } else {
+            orders = database.findAll();
+        }
+        List<EntityModel<Order>> ordersModel = orders.stream()
                 .map(order -> orderLinkFactory.toModel(order))
                 .collect(Collectors.toList());
+
         return ResponseEntity
-                .ok(CollectionModel.of(orders));
+                .ok(CollectionModel.of(ordersModel));
     }
 
 
@@ -106,7 +113,7 @@ public class OrderController {
         // הוספתי סטאטוס 200
         return ResponseEntity.ok(CollectionModel.of(entityModelList));
     }
-    
+
     // שאלה 4 ב - OrderController
     @PutMapping("order/{id}")
     ResponseEntity<?> addToOrder(@RequestBody Product aProduct, @PathVariable(value = "id") Long orderID) {
