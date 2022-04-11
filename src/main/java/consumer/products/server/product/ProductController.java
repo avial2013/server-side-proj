@@ -133,7 +133,7 @@ public class ProductController {
     
     // 2. 
    @GetMapping("products/{id}")
-   ResponseEntity<EntityModel<Product>> singleProduct(@PathVariable Long id){
+   public ResponseEntity<EntityModel<Product>> singleProduct(@PathVariable Long id){
        Product product = database.findById(id)
                .orElseThrow(()->new ProductNotFoundException(id));
        return ResponseEntity.ok(productFactory.toModel(product));

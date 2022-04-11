@@ -1,5 +1,7 @@
 package consumer.products.server.order;
 
+import consumer.products.server.product.Product;
+import consumer.products.server.product.ProductController;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
